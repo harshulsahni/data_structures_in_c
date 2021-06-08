@@ -44,6 +44,23 @@ void print_linked_list(struct LinkedList *ll) {
         printf("END\n");
 }
 
+int pop_linked_list(struct LinkedList **ll_address) {
+        struct LinkedList *ll = *ll_address;
+        if(!ll || !ll->next) {
+                printf("Lists of sizes 1 or 0 cannot be popped.\n"); 
+                exit(1); 
+        }
+        int val = ll->val;
+        **ll_address = *(ll->next);
+        ll->next = NULL;
+        free(*ll_address);
+
+//        int val = ll->val;
+//        *ll = *(ll->next);
+//        free(ll);
+        return val; 
+}
+
 
 int main(int argc, char* argv[]){
         if (argc > 1){ 
@@ -58,8 +75,16 @@ int main(int argc, char* argv[]){
                         current_ll = make_linked_list(val, current_ll); 
                         i--; 
                 }
-                print_linked_list(current_ll); 
-                destroy_linked_list(current_ll); 
+                print_linked_list(current_ll);
+
+                struct LinkedList *temp_ll = current_ll;
+                
+                int first_element = pop_linked_list(&current_ll);
+                printf("List after popping element %d:\n", first_element);
+                print_linked_list(current_ll);
+
+
+                destroy_linked_list(current_ll);
         } else { 
             printf("No list was entered. The program will default to printing [0, 1, 2]:\n"); 
 
