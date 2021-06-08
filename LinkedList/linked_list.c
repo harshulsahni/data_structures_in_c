@@ -2,7 +2,6 @@
 #include <stdio.h> 
 #include <stdlib.h>
 #include "linked_list.h"
-#include "utils.h"
 
 struct LinkedList *make_linked_list(int v, struct LinkedList *n){
         struct LinkedList *output_ll = malloc(sizeof(struct LinkedList));
@@ -19,6 +18,7 @@ struct LinkedList *make_linked_list(int v, struct LinkedList *n){
         return output_ll; 
 }
 
+
 void print_linked_list(struct LinkedList *ll) {
         printf("LinkedList has size %lu.\n", ll->size); 
 
@@ -30,6 +30,7 @@ void print_linked_list(struct LinkedList *ll) {
 
         printf("END\n");
 }
+
 
 int pop_linked_list(struct LinkedList **ll_address) {
         struct LinkedList *ll = *ll_address;
@@ -49,9 +50,11 @@ int pop_linked_list(struct LinkedList **ll_address) {
         return val; 
 }
 
+
 int peek_linked_list(struct LinkedList *ll) {
     return ll->val; 
 }
+
 
 int get_linked_list(struct LinkedList *ll, int idx) {
     if (idx < 0) {
@@ -69,6 +72,7 @@ int get_linked_list(struct LinkedList *ll, int idx) {
 
     return temp_ll->val;
 }
+
 
 void destroy_linked_list(struct LinkedList *ll){ 
         if(!ll) return;
