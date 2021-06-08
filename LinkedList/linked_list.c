@@ -1,12 +1,8 @@
 #include <assert.h>
 #include <stdio.h> 
 #include <stdlib.h>
-
-struct LinkedList {
-        int val; 
-        struct LinkedList *next;
-        long size;  
-};
+#include "linked_list.h"
+#include "utils.h"
 
 struct LinkedList *make_linked_list(int v, struct LinkedList *n){
         struct LinkedList *output_ll = malloc(sizeof(struct LinkedList));
@@ -21,15 +17,6 @@ struct LinkedList *make_linked_list(int v, struct LinkedList *n){
         }
 
         return output_ll; 
-}
-
-void destroy_linked_list(struct LinkedList *ll){ 
-        if(!ll) return;
-        assert(ll); 
-        struct LinkedList *temp_ll = ll;
-        ll = ll->next; 
-        free(temp_ll); 
-        destroy_linked_list(ll);  
 }
 
 void print_linked_list(struct LinkedList *ll) {
@@ -51,14 +38,47 @@ int pop_linked_list(struct LinkedList **ll_address) {
                 exit(1); 
         }
         int val = ll->val;
-        **ll_address = *(ll->next);
-        ll->next = NULL;
-        free(*ll_address);
+        struct LinkedList *next_ll = ll->next; 
+        ll->next = next_ll->next; 
+        ll->val = next_ll->val; 
+        ll->size = next_ll->size;  
 
-//        int val = ll->val;
-//        *ll = *(ll->next);
-//        free(ll);
+        next_ll->next = NULL; 
+        free(next_ll); 
+
         return val; 
+}
+
+int peek_linked_list(struct LinkedList *ll) {
+    return ll->val; 
+}
+
+int get_linked_list(struct LinkedList *ll, int idx) {
+    if (idx < 0) {
+        idx = ll->size + idx;
+    }
+
+    idx %= ll->size; 
+
+    struct LinkedList *temp_ll = ll; 
+
+    while (idx != 0) {
+        temp_ll = temp_ll->next; 
+        idx--;
+    }
+
+    return temp_ll->val;
+}
+
+void destroy_linked_list(struct LinkedList *ll){ 
+        if(!ll) return;
+        assert(ll); 
+
+        int dummy_val = 0; 
+        while(ll->size > 1) {
+            pop_linked_list(&ll); 
+        }
+        free(ll); 
 }
 
 
@@ -82,6 +102,8 @@ int main(int argc, char* argv[]){
                 int first_element = pop_linked_list(&current_ll);
                 printf("List after popping element %d:\n", first_element);
                 print_linked_list(current_ll);
+
+                printf("Get the index 2 of the list: %d\n", get_linked_list(current_ll, 2)); 
 
 
                 destroy_linked_list(current_ll);
