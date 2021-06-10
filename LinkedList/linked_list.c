@@ -1,3 +1,6 @@
+#ifndef LINKED_LIST_SEEN
+#define LINKED_LIST_SEEN
+
 #include <assert.h>
 #include <stdio.h> 
 #include <stdlib.h>
@@ -20,24 +23,29 @@ struct LinkedList *make_linked_list(int v, struct LinkedList *n){
 
 
 void print_linked_list(struct LinkedList *ll) {
-        printf("LinkedList has size %lu.\n", ll->size); 
-
         struct LinkedList *current_ll = ll;
-        do {
-                printf("%d -> ", current_ll->val); 
-                current_ll = current_ll->next; 
-        } while (current_ll);
+        while (current_ll) {
+            printf("%d -> ", current_ll->val); 
+            current_ll = current_ll->next; 
 
-        printf("END\n");
+        }
+        printf("NULL\n");
 }
 
 
 int pop_linked_list(struct LinkedList **ll_address) {
         struct LinkedList *ll = *ll_address;
-        if(!ll || !ll->next) {
-                printf("Lists of sizes 1 or 0 cannot be popped.\n"); 
-                exit(1); 
+        if(!ll) {
+            printf("Lists of size 0 cannot be popped.\n"); 
+            exit(1); 
         }
+        if (ll->size == 1) {
+            int val = ll->val;
+            ll->size = 0; 
+            free(ll); 
+            return val; 
+        }
+
         int val = ll->val;
         struct LinkedList *next_ll = ll->next; 
         ll->next = next_ll->next; 
@@ -74,15 +82,18 @@ int get_linked_list(struct LinkedList *ll, int idx) {
 }
 
 
+struct LinkedList *push_to_linked_list(struct LinkedList *ll, int num_to_push) {
+    return make_linked_list(num_to_push, ll); 
+}
+
+
 void destroy_linked_list(struct LinkedList *ll){ 
         if(!ll) return;
         assert(ll); 
 
-        int dummy_val = 0; 
-        while(ll->size > 1) {
+        while(ll->size > 0) {
             pop_linked_list(&ll); 
         }
-        free(ll); 
 }
 
 
@@ -101,8 +112,6 @@ int main(int argc, char* argv[]){
                 }
                 print_linked_list(current_ll);
 
-                struct LinkedList *temp_ll = current_ll;
-                
                 int first_element = pop_linked_list(&current_ll);
                 printf("List after popping element %d:\n", first_element);
                 print_linked_list(current_ll);
@@ -123,3 +132,5 @@ int main(int argc, char* argv[]){
 }
 
 
+
+#endif
