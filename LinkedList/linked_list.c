@@ -41,7 +41,7 @@ int pop_linked_list(struct LinkedList **ll_address) {
         }
         if (ll->size == 1) {
             int val = ll->val;
-            ll->size = 0; 
+            *ll_address = NULL;  
             free(ll); 
             return val; 
         }
@@ -65,6 +65,11 @@ int peek_linked_list(struct LinkedList *ll) {
 
 
 int get_linked_list(struct LinkedList *ll, int idx) {
+    if (!ll) {
+            printf("The LinkedList is empty. The get_linked_list() function cannot return anything.\n"); 
+            exit(1); 
+    }
+
     if (idx < 0) {
         idx = ll->size + idx;
     }
@@ -89,9 +94,8 @@ struct LinkedList *push_to_linked_list(struct LinkedList *ll, int num_to_push) {
 
 void destroy_linked_list(struct LinkedList *ll) {
     if (!ll) return;
-    assert(ll);
 
-    while (ll->size > 0) {
+    while (ll) {
         pop_linked_list(&ll);
     }
 }
