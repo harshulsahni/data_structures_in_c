@@ -3,10 +3,14 @@
 struct LinkedList {
     int val; 
     struct LinkedList *next; 
-    long size; 
+    int size;
 };
 
-struct LinkedList *push_to_linked_list(struct LinkedList *ll, int num_to_push); 
+struct LinkedList *make_linked_list(int v, struct LinkedList *n);
+
+struct LinkedList *push_to_linked_list(struct LinkedList *ll, int num_to_push);
+
+int get_linked_list(struct LinkedList *ll, int idx);
 
 int pop_linked_list(struct LinkedList **ll_address);
 
